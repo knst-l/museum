@@ -1,0 +1,8 @@
+.ItemCardList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
+    row-gap: 8px;
+    column-gap: 8px;
+}

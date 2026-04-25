@@ -1,0 +1,35 @@
+.MuseumSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+    background: var(--color-block-background-white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.SectionHeader {
+    height: 39px;
+    margin: 0;
+    color: var(--color-accent);
+    text-align: center;
+    font-weight: bold;
+    font-size: var(--font-size-big);
+}
+
+.SectionMainContent {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .MuseumSection {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .SectionMainContent {
+        gap: 16px;
+    }
+}

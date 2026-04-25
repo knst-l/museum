@@ -1,0 +1,322 @@
+// Database Schema for INRUTU Museum Django Backend
+// Generated from Django models
+// Database: PostgreSQL
+// Django Version: 5.2.7
+
+// ============================================
+// Shared Models (shared app)
+// ============================================
+
+Table shared_image {
+  id bigint [pk, increment]
+  image varchar [null]
+  description varchar(255) [null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель для хранения изображений. ImageField: upload_to=images/, formats: jpg, jpeg, png, gif, webp, svg'
+}
+
+Table shared_model3d {
+  id bigint [pk, increment]
+  model varchar [null]
+  description varchar(255) [null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель для хранения 3D моделей. FileField: upload_to=models3d/, formats: glb, gltf'
+}
+
+// ============================================
+// Historical Figures Models (historical_figures app)
+// ============================================
+
+Table historical_figures_sciencefield {
+  id bigint [pk, increment]
+  name varchar(255) [not null, unique]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель области науки'
+}
+
+Table historical_figures_historicalfigure {
+  id bigint [pk, increment]
+  last_name varchar(255) [not null]
+  first_name varchar(255) [not null]
+  middle_name varchar(255) [not null]
+  birth_date date [not null]
+  death_date date [null]
+  description text [not null]
+  biography text [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель исторической личности. Поля: last_name (Фамилия), first_name (Имя), middle_name (Отчество), description (Краткое описание), biography (Биография)'
+}
+
+// Many-to-Many: HistoricalFigure <-> ScienceField
+Table historical_figures_historicalfigure_science_fields {
+  id bigint [pk, increment]
+  historicalfigure_id bigint [not null, ref: > historical_figures_historicalfigure.id]
+  sciencefield_id bigint [not null, ref: > historical_figures_sciencefield.id]
+  
+  indexes {
+    (historicalfigure_id, sciencefield_id) [unique]
+  }
+}
+
+// Many-to-Many: HistoricalFigure <-> Image
+Table historical_figures_historicalfigure_images {
+  id bigint [pk, increment]
+  historicalfigure_id bigint [not null, ref: > historical_figures_historicalfigure.id]
+  image_id bigint [not null, ref: > shared_image.id]
+  
+  indexes {
+    (historicalfigure_id, image_id) [unique]
+  }
+}
+
+// Many-to-Many: HistoricalFigure <-> Artifact
+Table historical_figures_historicalfigure_artifacts {
+  id bigint [pk, increment]
+  historicalfigure_id bigint [not null, ref: > historical_figures_historicalfigure.id]
+  artifact_id bigint [not null, ref: > artifacts_artifact.id]
+  
+  indexes {
+    (historicalfigure_id, artifact_id) [unique]
+  }
+}
+
+// ============================================
+// Artifacts Models (artifacts app)
+// ============================================
+
+Table artifacts_hallcategory {
+  id bigint [pk, increment]
+  name varchar(255) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель категории зала'
+}
+
+Table artifacts_hall {
+  id bigint [pk, increment]
+  name varchar(255) [not null]
+  image_id bigint [not null, ref: > shared_image.id]
+  category_id bigint [not null, ref: > artifacts_hallcategory.id]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель зала музея. ForeignKey: image_id -> Image (PROTECT), category_id -> HallCategory (PROTECT)'
+}
+
+Table artifacts_artifactcategory {
+  id bigint [pk, increment]
+  name varchar(255) [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель категории артефакта'
+}
+
+Table artifacts_artifact {
+  id bigint [pk, increment]
+  name varchar(255) [not null]
+  description text [not null]
+  creation_year integer [not null]
+  category_id bigint [not null, ref: > artifacts_artifactcategory.id]
+  hall_id bigint [not null, ref: > artifacts_hall.id]
+  model_3d_id bigint [null, ref: > shared_model3d.id]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Модель артефакта. ForeignKey: category_id -> ArtifactCategory (PROTECT), hall_id -> Hall (PROTECT), model_3d_id -> Model3D (SET_NULL, nullable)'
+}
+
+// Many-to-Many: Artifact <-> Image
+Table artifacts_artifact_images {
+  id bigint [pk, increment]
+  artifact_id bigint [not null, ref: > artifacts_artifact.id]
+  image_id bigint [not null, ref: > shared_image.id]
+  
+  indexes {
+    (artifact_id, image_id) [unique]
+  }
+}
+
+// ============================================
+// Excursions Models (excursions app)
+// ============================================
+
+Table excursions_excursion {
+  id bigint [pk, increment]
+  title varchar(255) [not null]
+  description text [not null]
+  location varchar(255) [not null]
+  image_id bigint [null, ref: > shared_image.id]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  
+  Note: 'Excursion model. Fields: title (Title), description (Description), location (Location), image_id (Image). ForeignKey: image_id -> Image (SET_NULL, nullable)'
+}
+
+// Many-to-Many: Excursion <-> Hall
+Table excursions_excursion_halls {
+  id bigint [pk, increment]
+  excursion_id bigint [not null, ref: > excursions_excursion.id]
+  hall_id bigint [not null, ref: > artifacts_hall.id]
+  
+  indexes {
+    (excursion_id, hall_id) [unique]
+  }
+  
+  Note: 'Relationship: Excursion <-> Halls'
+}
+
+// Many-to-Many: Excursion <-> Artifact
+Table excursions_excursion_artifacts {
+  id bigint [pk, increment]
+  excursion_id bigint [not null, ref: > excursions_excursion.id]
+  artifact_id bigint [not null, ref: > artifacts_artifact.id]
+  
+  indexes {
+    (excursion_id, artifact_id) [unique]
+  }
+  
+  Note: 'Relationship: Excursion <-> Artifacts'
+}
+
+// ============================================
+// Django Authentication & Authorization (django.contrib.auth)
+// ============================================
+
+Table django_content_type {
+  id integer [pk, increment]
+  app_label varchar(100) [not null]
+  model varchar(100) [not null]
+  
+  indexes {
+    (app_label, model) [unique]
+  }
+  
+  Note: 'Типы контента для системы разрешений Django'
+}
+
+Table auth_permission {
+  id integer [pk, increment]
+  name varchar(255) [not null]
+  content_type_id integer [not null, ref: > django_content_type.id]
+  codename varchar(100) [not null]
+  
+  indexes {
+    (content_type_id, codename) [unique]
+  }
+  
+  Note: 'Разрешения в системе Django'
+}
+
+Table auth_group {
+  id integer [pk, increment]
+  name varchar(150) [not null, unique]
+  
+  Note: 'Группы пользователей Django'
+}
+
+Table auth_user {
+  id integer [pk, increment]
+  password varchar(128) [not null]
+  last_login timestamp [null]
+  is_superuser boolean [not null, default: false]
+  username varchar(150) [not null, unique]
+  first_name varchar(150) [not null]
+  last_name varchar(150) [not null]
+  email varchar(254) [not null]
+  is_staff boolean [not null, default: false]
+  is_active boolean [not null, default: true]
+  date_joined timestamp [not null]
+  
+  Note: 'Модель пользователя Django (django.contrib.auth.models.User)'
+}
+
+// Many-to-Many: User <-> Group
+Table auth_user_groups {
+  id bigint [pk, increment]
+  user_id integer [not null, ref: > auth_user.id]
+  group_id integer [not null, ref: > auth_group.id]
+  
+  indexes {
+    (user_id, group_id) [unique]
+  }
+}
+
+// Many-to-Many: User <-> Permission
+Table auth_user_user_permissions {
+  id bigint [pk, increment]
+  user_id integer [not null, ref: > auth_user.id]
+  permission_id integer [not null, ref: > auth_permission.id]
+  
+  indexes {
+    (user_id, permission_id) [unique]
+  }
+}
+
+// Many-to-Many: Group <-> Permission
+Table auth_group_permissions {
+  id bigint [pk, increment]
+  group_id integer [not null, ref: > auth_group.id]
+  permission_id integer [not null, ref: > auth_permission.id]
+  
+  indexes {
+    (group_id, permission_id) [unique]
+  }
+}
+
+// ============================================
+// Django Sessions (django.contrib.sessions)
+// ============================================
+
+Table django_session {
+  session_key varchar(40) [pk]
+  session_data text [not null]
+  expire_date timestamp [not null]
+  
+  indexes {
+    expire_date
+  }
+  
+  Note: 'Сессии пользователей Django'
+}
+
+// ============================================
+// Relationships Summary
+// ============================================
+
+// Foreign Key Relationships:
+// - Hall.image_id -> Image.id (on_delete=PROTECT)
+// - Hall.category_id -> HallCategory.id (on_delete=PROTECT)
+// - Artifact.category_id -> ArtifactCategory.id (on_delete=PROTECT)
+// - Artifact.hall_id -> Hall.id (on_delete=PROTECT)
+// - Artifact.model_3d_id -> Model3D.id (on_delete=SET_NULL, nullable)
+// - Excursion.image_id -> Image.id (on_delete=SET_NULL, nullable)
+
+// Many-to-Many Relationships (via junction tables):
+// - HistoricalFigure <-> ScienceField (historical_figures_historicalfigure_science_fields)
+// - HistoricalFigure <-> Image (historical_figures_historicalfigure_images)
+// - HistoricalFigure <-> Artifact (historical_figures_historicalfigure_artifacts)
+// - Artifact <-> Image (artifacts_artifact_images)
+// - Excursion <-> Hall (excursions_excursion_halls)
+// - Excursion <-> Artifact (excursions_excursion_artifacts)
+// - User <-> Group (auth_user_groups)
+// - User <-> Permission (auth_user_user_permissions)
+// - Group <-> Permission (auth_group_permissions)
+
+// Django Authentication Relationships:
+// - Permission.content_type_id -> ContentType.id
+// - User <-> Group (Many-to-Many)
+// - User <-> Permission (Many-to-Many)
+// - Group <-> Permission (Many-to-Many)
+
+// All models inherit from TimeStampedModel (created_at, updated_at)
+

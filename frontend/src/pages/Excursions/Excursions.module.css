@@ -1,0 +1,44 @@
+.Excursions {
+    max-width: var(--width-main-content);
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.Excursions h1 {
+    color: var(--c-dark-blue);
+    margin-bottom: 1.5rem;
+    font-size: var(--font-size-big);
+    font-weight: var(--font-weight-semibold);
+}
+
+.description {
+    color: var(--c-dark-gray);
+    font-size: var(--font-size-standart);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    max-width: 800px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .Excursions {
+        padding: 1.5rem 1rem;
+    }
+}
+
+.content {
+    background: var(--c-white);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+} 

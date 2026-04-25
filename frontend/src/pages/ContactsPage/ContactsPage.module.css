@@ -1,0 +1,152 @@
+.ContactsPage {
+  padding: 40px 24px;
+  max-width: var(--width-main-content);
+  margin: 0 auto;
+  font-family: var(--font-family-main);
+}
+
+.ContactsPage h1 {
+  color: var(--c-dark-blue);
+  font-size: 32px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.ContactInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: stretch; 
+}
+
+.LeftColumn,
+.RightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ContactBlock {
+  background: var(--c-white);
+  border-radius: var(--border-radius);
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.ContactBlock:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--c-light-blue);
+}
+
+.ContactBlock h2 {
+  color: var(--c-dark-blue);
+  font-size: 20px;
+  margin-bottom: 16px;
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ContactBlock p {
+  color: var(--c-dark-gray);
+  margin: 8px 0;
+  font-size: var(--font-size-standart);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.MapContainer {
+  width: 100%;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--c-light-gray);
+  position: relative; 
+  transition: border 0.3s ease; 
+}
+
+.MapContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  pointer-events: none; 
+}
+
+.MapContainer:hover::before {
+  border-color: #3472C0; 
+  animation: frameAnimation 0.5s ease-in-out; 
+}
+
+@keyframes frameAnimation {
+  0% {
+    border-width: 0;
+  }
+  100% {
+    border-width: 1px;
+  }
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 992px) {
+  .ContactInfo {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .LeftColumn,
+  .RightColumn {
+    gap: 20px;
+  }
+
+  .ContactBlock {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ContactsPage {
+    padding: 24px 16px;
+  }
+
+  .ContactsPage h1 {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+
+  .ContactInfo {
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .MapPlaceholder {
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ContactBlock {
+    padding: 20px;
+  }
+
+  .ContactBlock h2 {
+    font-size: 18px;
+  }
+
+  .ContactBlock p {
+    font-size: 15px;
+  }
+
+  .MapPlaceholder {
+    height: 200px;
+  }
+}

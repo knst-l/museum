@@ -1,0 +1,33 @@
+.image-focus-preview {
+    position: relative;
+    width: 320px;
+    max-width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 1px solid #c7c7c7;
+    border-radius: 6px;
+    background: #f3f3f3;
+    cursor: crosshair;
+}
+
+.image-focus-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-focus-marker {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #0c4da2, 0 1px 4px rgba(0, 0, 0, 0.35);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.image-focus-preview-live {
+    margin-top: 12px;
+}

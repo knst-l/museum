@@ -1,0 +1,336 @@
+// Схема базы данных для бэкенда INRUTU Museum на Django
+// С русскими названиями таблиц и полей
+// База данных: PostgreSQL
+// Версия Django: 5.2.7
+
+// ============================================
+// Общие модели (shared app)
+// ============================================
+
+Table Изображение {
+  id bigint [pk, increment]
+  изображение varchar [null]
+  описание varchar(255) [null]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Изображение - Модель для хранения изображений с поддержкой разных форматов'
+}
+
+Table Модель3D {
+  id bigint [pk, increment]
+  модель varchar [null]
+  описание varchar(255) [null]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: '3D модель - Модель для хранения 3D моделей в формате .glb'
+}
+
+// ============================================
+// Исторические личности (historical_figures app)
+// ============================================
+
+Table ОбластьНауки {
+  id bigint [pk, increment]
+  название varchar(255) [not null, unique]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Область науки'
+}
+
+Table ИсторическаяЛичность {
+  id bigint [pk, increment]
+  фамилия varchar(255) [not null]
+  имя varchar(255) [not null]
+  отчество varchar(255) [not null]
+  дата_рождения date [not null]
+  дата_смерти date [null]
+  краткое_описание text [not null]
+  биография text [not null]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Историческая личность'
+}
+
+// Связь Many-to-Many: Историческая личность <-> Область науки
+Table ИсторическаяЛичность_ОбластиНауки {
+  id bigint [pk, increment]
+  историческая_личность_id bigint [not null, ref: > ИсторическаяЛичность.id]
+  область_науки_id bigint [not null, ref: > ОбластьНауки.id]
+  
+  indexes {
+    (историческая_личность_id, область_науки_id) [unique]
+  }
+  
+  Note: 'Связь: Историческая личность ↔ Области науки'
+}
+
+// Связь Many-to-Many: Историческая личность <-> Изображение
+Table ИсторическаяЛичность_Изображения {
+  id bigint [pk, increment]
+  историческая_личность_id bigint [not null, ref: > ИсторическаяЛичность.id]
+  изображение_id bigint [not null, ref: > Изображение.id]
+  
+  indexes {
+    (историческая_личность_id, изображение_id) [unique]
+  }
+  
+  Note: 'Связь: Историческая личность ↔ Изображения'
+}
+
+// Связь Many-to-Many: Историческая личность <-> Артефакт
+Table ИсторическаяЛичность_Артефакты {
+  id bigint [pk, increment]
+  историческая_личность_id bigint [not null, ref: > ИсторическаяЛичность.id]
+  артефакт_id bigint [not null, ref: > Артефакт.id]
+  
+  indexes {
+    (историческая_личность_id, артефакт_id) [unique]
+  }
+  
+  Note: 'Связь: Историческая личность ↔ Артефакты'
+}
+
+// ============================================
+// Артефакты (artifacts app)
+// ============================================
+
+Table КатегорияЗала {
+  id bigint [pk, increment]
+  название varchar(255) [not null]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Категория зала'
+}
+
+Table Зал {
+  id bigint [pk, increment]
+  название varchar(255) [not null]
+  изображение_id bigint [not null, ref: > Изображение.id]
+  категория_id bigint [not null, ref: > КатегорияЗала.id]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Зал - ForeignKey: изображение_id -> Изображение (PROTECT), категория_id -> Категория зала (PROTECT)'
+}
+
+Table КатегорияАртефакта {
+  id bigint [pk, increment]
+  название varchar(255) [not null]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Категория артефакта'
+}
+
+Table Артефакт {
+  id bigint [pk, increment]
+  название varchar(255) [not null]
+  описание text [not null]
+  год_создания integer [not null]
+  категория_id bigint [not null, ref: > КатегорияАртефакта.id]
+  зал_id bigint [not null, ref: > Зал.id]
+  модель_3d_id bigint [null, ref: > Модель3D.id]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Артефакт - ForeignKey: категория_id -> Категория артефакта (PROTECT), зал_id -> Зал (PROTECT), модель_3d_id -> 3D модель (SET_NULL, nullable)'
+}
+
+// Связь Many-to-Many: Артефакт <-> Изображение
+Table Артефакт_Изображения {
+  id bigint [pk, increment]
+  артефакт_id bigint [not null, ref: > Артефакт.id]
+  изображение_id bigint [not null, ref: > Изображение.id]
+  
+  indexes {
+    (артефакт_id, изображение_id) [unique]
+  }
+  
+  Note: 'Связь: Артефакт ↔ Изображения'
+}
+
+// ============================================
+// Экскурсии (excursions app)
+// ============================================
+
+Table Экскурсия {
+  id bigint [pk, increment]
+  название varchar(255) [not null]
+  описание text [not null]
+  место_проведения varchar(255) [not null]
+  изображение_id bigint [null, ref: > Изображение.id]
+  дата_создания timestamp [not null]
+  дата_обновления timestamp [not null]
+  
+  Note: 'Экскурсия - ForeignKey: изображение_id -> Изображение (SET_NULL, nullable)'
+}
+
+// Связь Many-to-Many: Экскурсия <-> Зал
+Table Экскурсия_Залы {
+  id bigint [pk, increment]
+  экскурсия_id bigint [not null, ref: > Экскурсия.id]
+  зал_id bigint [not null, ref: > Зал.id]
+  
+  indexes {
+    (экскурсия_id, зал_id) [unique]
+  }
+  
+  Note: 'Связь: Экскурсия ↔ Залы'
+}
+
+// Связь Many-to-Many: Экскурсия <-> Артефакт
+Table Экскурсия_Артефакты {
+  id bigint [pk, increment]
+  экскурсия_id bigint [not null, ref: > Экскурсия.id]
+  артефакт_id bigint [not null, ref: > Артефакт.id]
+  
+  indexes {
+    (экскурсия_id, артефакт_id) [unique]
+  }
+  
+  Note: 'Связь: Экскурсия ↔ Артефакты'
+}
+
+// ============================================
+// Аутентификация и авторизация Django (django.contrib.auth)
+// ============================================
+
+Table ТипКонтента {
+  id integer [pk, increment]
+  метка_приложения varchar(100) [not null]
+  модель varchar(100) [not null]
+  
+  indexes {
+    (метка_приложения, модель) [unique]
+  }
+  
+  Note: 'Тип контента - Типы контента для системы разрешений Django'
+}
+
+Table Разрешение {
+  id integer [pk, increment]
+  название varchar(255) [not null]
+  тип_контента_id integer [not null, ref: > ТипКонтента.id]
+  кодовое_имя varchar(100) [not null]
+  
+  indexes {
+    (тип_контента_id, кодовое_имя) [unique]
+  }
+  
+  Note: 'Разрешение - Разрешения в системе Django'
+}
+
+Table Группа {
+  id integer [pk, increment]
+  название varchar(150) [not null, unique]
+  
+  Note: 'Группа - Группы пользователей Django'
+}
+
+Table Пользователь {
+  id integer [pk, increment]
+  пароль varchar(128) [not null]
+  последний_вход timestamp [null]
+  суперпользователь boolean [not null, default: false]
+  имя_пользователя varchar(150) [not null, unique]
+  имя varchar(150) [not null]
+  фамилия varchar(150) [not null]
+  электронная_почта varchar(254) [not null]
+  персонал boolean [not null, default: false]
+  активен boolean [not null, default: true]
+  дата_регистрации timestamp [not null]
+  
+  Note: 'Пользователь - Модель пользователя Django'
+}
+
+// Связь Many-to-Many: Пользователь <-> Группа
+Table Пользователь_Группы {
+  id bigint [pk, increment]
+  пользователь_id integer [not null, ref: > Пользователь.id]
+  группа_id integer [not null, ref: > Группа.id]
+  
+  indexes {
+    (пользователь_id, группа_id) [unique]
+  }
+  
+  Note: 'Связь: Пользователь ↔ Группы'
+}
+
+// Связь Many-to-Many: Пользователь <-> Разрешение
+Table Пользователь_Разрешения {
+  id bigint [pk, increment]
+  пользователь_id integer [not null, ref: > Пользователь.id]
+  разрешение_id integer [not null, ref: > Разрешение.id]
+  
+  indexes {
+    (пользователь_id, разрешение_id) [unique]
+  }
+  
+  Note: 'Связь: Пользователь ↔ Разрешения'
+}
+
+// Связь Many-to-Many: Группа <-> Разрешение
+Table Группа_Разрешения {
+  id bigint [pk, increment]
+  группа_id integer [not null, ref: > Группа.id]
+  разрешение_id integer [not null, ref: > Разрешение.id]
+  
+  indexes {
+    (группа_id, разрешение_id) [unique]
+  }
+  
+  Note: 'Связь: Группа ↔ Разрешения'
+}
+
+// ============================================
+// Сессии Django (django.contrib.sessions)
+// ============================================
+
+Table Сессия {
+  ключ_сессии varchar(40) [pk]
+  данные_сессии text [not null]
+  дата_истечения timestamp [not null]
+  
+  indexes {
+    дата_истечения
+  }
+  
+  Note: 'Сессия - Сессии пользователей Django'
+}
+
+// ============================================
+// Сводка связей
+// ============================================
+
+// Связи Foreign Key:
+// - Зал.изображение_id -> Изображение.id (on_delete=PROTECT)
+// - Зал.категория_id -> Категория зала.id (on_delete=PROTECT)
+// - Артефакт.категория_id -> Категория артефакта.id (on_delete=PROTECT)
+// - Артефакт.зал_id -> Зал.id (on_delete=PROTECT)
+// - Артефакт.модель_3d_id -> 3D модель.id (on_delete=SET_NULL, nullable)
+// - Экскурсия.изображение_id -> Изображение.id (on_delete=SET_NULL, nullable)
+// - Разрешение.тип_контента_id -> Тип контента.id
+
+// Связи Many-to-Many (через промежуточные таблицы):
+// - Историческая личность <-> Область науки (ИсторическаяЛичность_ОбластиНауки)
+// - Историческая личность <-> Изображение (ИсторическаяЛичность_Изображения)
+// - Историческая личность <-> Артефакт (ИсторическаяЛичность_Артефакты)
+// - Артефакт <-> Изображение (Артефакт_Изображения)
+// - Экскурсия <-> Зал (Экскурсия_Залы)
+// - Экскурсия <-> Артефакт (Экскурсия_Артефакты)
+// - Пользователь <-> Группа (Пользователь_Группы)
+// - Пользователь <-> Разрешение (Пользователь_Разрешения)
+// - Группа <-> Разрешение (Группа_Разрешения)
+
+// Связи аутентификации Django:
+// - Разрешение.тип_контента_id -> Тип контента.id
+// - Пользователь <-> Группа (Many-to-Many)
+// - Пользователь <-> Разрешение (Many-to-Many)
+// - Группа <-> Разрешение (Many-to-Many)
+
+// Все модели наследуются от TimeStampedModel (дата_создания - Дата создания, дата_обновления - Дата обновления)

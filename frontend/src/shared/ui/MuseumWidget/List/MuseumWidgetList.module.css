@@ -1,0 +1,5 @@
+.MuseumWidgetList {
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr;
+}

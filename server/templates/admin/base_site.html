@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Музей вычислительной техники ИрНИТУ{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/admin_custom.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'admin/img/logo.png' %}" alt="Логотип ИрНИТУ" style="height: 40px; margin-right: 10px; vertical-align: middle;">
+        <span style="vertical-align: middle;">Музей вычислительной техники ИрНИТУ</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+

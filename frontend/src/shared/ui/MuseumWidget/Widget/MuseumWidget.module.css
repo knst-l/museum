@@ -1,0 +1,56 @@
+
+.MuseumWidget {
+    width: 100%;
+    height: 100px;
+    min-height: 100px;
+    background-size: cover;
+    background-position: center center;
+    border-radius: var(--border-radius);
+    transition: transform var(--transition-medium);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.MuseumWidget:hover {
+    transform: scale(0.98, 0.95); 
+}
+
+.ContentWrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius);
+    background-image: linear-gradient(to right, var(--c-dark-blue) 10%, rgba(0, 0, 0, 0) 100%);
+    position: relative;
+    transition: background-image var(--transition-medium); 
+}
+
+.ContentWrapper:hover {
+    background-image: linear-gradient(to right, var(--c-blue) 10%, rgba(0, 0, 0, 0) 100%);
+}
+
+.ContentWrapper p{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    font-weight: bold;
+    font-size: var(--font-size-big);
+    padding-left: 80px;
+    padding-right: 16px;
+    color: var(--c-white);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+    .ContentWrapper p {
+        padding-left: 24px;
+        font-size: var(--font-size-standart);
+    }
+}
+
+@media (max-width: 480px) {
+    .ContentWrapper p {
+        padding-left: 16px;
+        font-size: 14px;
+    }
+}

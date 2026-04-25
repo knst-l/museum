@@ -1,0 +1,81 @@
+.timeline {
+    position: relative;
+    width: 120px;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.century {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: opacity var(--transition-medium);
+    width: 100%;
+    position: relative;
+}
+
+.century:hover {
+    opacity: 0.7;
+}
+
+.century.active {
+    opacity: 1;
+}
+
+.century.active .centuryLabel {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+}
+
+.centuryLabel {
+    font-size: 16px;
+    color: var(--color-secondary);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    margin-right: 12px;
+}
+
+.centuryLine {
+    width: 3px;
+    height: 24px;
+    background-color: var(--color-block-background-dark-gray);
+    border-radius: 1px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .timeline {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        flex-direction: row;
+        width: 100%;
+        padding: 12px;
+        justify-content: center;
+        gap: 16px;
+        border-radius: var(--border-radius);
+        box-shadow: none;
+    }
+    .century {
+        padding: 6px 8px;
+    }
+    .centuryLabel {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    .centuryLine {
+        width: 100%;
+        height: 2px;
+    }
+}
+

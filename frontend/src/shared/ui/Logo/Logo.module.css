@@ -1,0 +1,23 @@
+.Logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--c-dark-blue);
+    font-size: var(--font-size-big);
+    font-weight: var(--font-weight-semibold);
+}
+
+.Logo img {
+    height: 40px;
+    width: auto;
+}
+
+.Logo p{
+    text-align: left;
+    color: var(--c-dark-blue);
+    margin-left: 16px;
+    max-width: 200px;
+    font-size: var(--font-size-standart);
+    font-weight: var(--font-weight-semibold);
+}
