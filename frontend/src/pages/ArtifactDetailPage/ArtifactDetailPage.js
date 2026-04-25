@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import Styles from "./ArtifactDetailPage.module.css"
 import { useParams, useNavigate } from "react-router-dom"
 import Breadcrumbs from "../../shared/ui/Breadcrumbs/Breadcrumbs"
-import { ArtifactsAPI, HallsAPI } from "../../shared/const/api"
+import { ArtifactsAPI, HallsAPI, resolveMediaUrl } from "../../shared/const/api"
 
 export function ArtifactDetailPage() {
     const { id } = useParams()
@@ -39,7 +39,7 @@ export function ArtifactDetailPage() {
 
                 const imagesArray = Array.isArray(artifactData.images) ? artifactData.images : []
                 const firstImage = imagesArray[0]
-                const imageUrl = firstImage?.image_url || firstImage?.url || "/logo192.png"
+                const imageUrl = resolveMediaUrl(firstImage?.image_url || firstImage?.image || firstImage?.url || "/logo192.png")
 
                 const transformedArtifact = {
                     id: artifactData.id,
@@ -48,7 +48,7 @@ export function ArtifactDetailPage() {
                     description: artifactData.description || "",
                     image: imageUrl,
                     images: imagesArray.length > 0 
-                        ? imagesArray.map(img => img?.image_url || img?.url || "/logo192.png")
+                        ? imagesArray.map(img => resolveMediaUrl(img?.image_url || img?.image || img?.url || "/logo192.png"))
                         : ["/logo192.png"],
                     category: artifactData.category,
                     hall: artifactData.hall,

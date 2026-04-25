@@ -1,10 +1,10 @@
 import Styles from "./ItemCardList.module.css";
 import {ItemCard} from "../Card/ItemCard";
 
-export function ItemCardList({persons}) {
+export function ItemCardList({persons, noWrap = false}) {
 
     return (
-        <div className={Styles.ItemCardList}>
+        <div className={`${Styles.ItemCardList} ${noWrap ? Styles.ItemCardListNoWrap : ''}`}>
             {persons.map((personData, index) =>
                 <ItemCard
                     key={index}

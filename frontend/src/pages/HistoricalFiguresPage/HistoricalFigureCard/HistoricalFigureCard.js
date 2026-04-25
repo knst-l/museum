@@ -1,5 +1,6 @@
 import Styles from './HistoricalFigureCard.module.css';
 import {Link} from "react-router-dom";
+import { resolveMediaUrl } from '../../../shared/const/api';
 
 export function HistoricalFigureCard({figure}) {
     // Извлекаем год из birth_date
@@ -34,7 +35,7 @@ export function HistoricalFigureCard({figure}) {
         ? figure.images[0]
         : null;
     const imageUrl = imageData
-        ? (imageData.image_url || imageData.image || '')
+        ? resolveMediaUrl(imageData.image_url || imageData.image || '')
         : '';
     const imageStyle = imageData?.object_position
         ? { objectPosition: imageData.object_position }

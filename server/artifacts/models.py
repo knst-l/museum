@@ -12,7 +12,7 @@ class HallCategory(TimeStampedModel):
     class Meta:
         verbose_name = "Категория зала"
         verbose_name_plural = "Категории залов"
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -25,12 +25,12 @@ class Hall(TimeStampedModel):
         verbose_name="Название зала"
     )
     image = models.ForeignKey(
-        Image, 
+        Image,
         on_delete=models.PROTECT,
         verbose_name="Изображение зала"
     )
     category = models.ForeignKey(
-        HallCategory, 
+        HallCategory,
         on_delete=models.PROTECT,
         verbose_name="Категория зала"
     )
@@ -38,7 +38,7 @@ class Hall(TimeStampedModel):
     class Meta:
         verbose_name = "Зал"
         verbose_name_plural = "Залы"
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -54,7 +54,7 @@ class ArtifactCategory(TimeStampedModel):
     class Meta:
         verbose_name = "Категория артефакта"
         verbose_name_plural = "Категории артефактов"
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -73,34 +73,41 @@ class Artifact(TimeStampedModel):
         verbose_name="Год создания"
     )
     category = models.ForeignKey(
-        ArtifactCategory, 
+        ArtifactCategory,
         on_delete=models.PROTECT,
         verbose_name="Категория артефакта"
     )
     hall = models.ForeignKey(
-        Hall, 
+        Hall,
         on_delete=models.PROTECT,
         verbose_name="Зал"
     )
     model_3d = models.ForeignKey(
-        Model3D, 
-        null=True, 
-        blank=True, 
+        Model3D,
+        null=True,
+        blank=True,
         on_delete=models.SET_NULL,
         verbose_name="3D модель"
     )
     images = models.ManyToManyField(
-        Image, 
-        related_name='artifacts', 
+        Image,
+        related_name="artifacts",
         blank=True,
         verbose_name="Изображения"
     )
-    # Связь с историческими личностями будет добавлена после создания модели HistoricalFigure
+    primary_image = models.ForeignKey(
+        Image,
+        related_name="artifacts_primary",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Главное изображение"
+    )
 
     class Meta:
         verbose_name = "Артефакт"
         verbose_name_plural = "Артефакты"
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name

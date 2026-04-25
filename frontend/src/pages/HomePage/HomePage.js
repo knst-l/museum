@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Styles from "./HomePage.module.css";
 import { MuseumSection, MuseumWidgetList, ItemCardList } from "../../shared/ui";
-import { HallsAPI, HistoricalFiguresAPI } from "../../shared/const/api";
+import { HallsAPI, HistoricalFiguresAPI, resolveMediaUrl } from "../../shared/const/api";
 import { excursions } from "../const УСТАРЕЛО/excursions";
 import { ExcursionCard } from "../Excursions/ExcursionCard/ExcursionCard";
 
@@ -38,14 +38,14 @@ export function HomePage() {
           const hallsWidgets = hallsArray.slice(0, 6).map((hall) => ({
             id: hall.id,
             text: hall.name,
-            imageUrl: hall.image?.image_url || hall.image?.image || "",
+            imageUrl: resolveMediaUrl(hall.image?.image_url || hall.image?.image || ""),
             imagePosition: hall.image?.object_position || "50% 50%",
             link: `/artifacts?hallId=${hall.id}`,
           }));
 
           // --- Обработка исторических личностей ---
           const mappedPersons = figuresArray.map((f) => ({
-            imageUrl: f.images?.[0]?.image_url || f.images?.[0]?.image || "",
+            imageUrl: resolveMediaUrl(f.images?.[0]?.image_url || f.images?.[0]?.image || ""),
             imagePosition: f.images?.[0]?.object_position || "50% 50%",
             personName: f.full_name,
             link: `/historical_figures/${f.id}`,
@@ -54,7 +54,7 @@ export function HomePage() {
           // --- Устанавливаем в состояние ---
           if (isMounted) {
             setHalls(hallsWidgets);
-            setPersons(mappedPersons.slice(0, 12));
+            setPersons(mappedPersons.slice(0, 5));
             setLoading(false);
           }
         })
@@ -183,7 +183,7 @@ export function HomePage() {
           link="/historical_figures"
           linkText="Смотреть всех"
         >
-          <ItemCardList persons={persons} />
+          <ItemCardList persons={persons} noWrap />
         </MuseumSection>
       )}
 

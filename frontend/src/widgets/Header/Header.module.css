@@ -17,6 +17,11 @@
     padding: 0 2rem;
 }
 
+.SearchWrap {
+    width: min(320px, 100%);
+    flex-shrink: 0;
+}
+
 .NavBar {
     display: flex;
     align-items: center;
@@ -26,17 +31,28 @@
 .NavSection {
     display: flex;
     gap: 1.5rem;
+    align-items: stretch;
 }
 
 .NavSection a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
     color: var(--c-dark-gray);
     font-size: var(--font-size-standart);
     font-weight: var(--font-weight-light);
     padding: 0.5rem 1rem;
+    min-height: 52px;
+    text-align: center;
+    line-height: 1.25;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+}
+
+.NavSection a p {
+    margin: 0;
 }
 
 .NavSection a::before {
@@ -151,6 +167,7 @@
 
     .NavSection a {
         padding: 0.4rem 0.8rem;
+        min-height: 48px;
     }
 
     .SearchBar input {
@@ -160,16 +177,25 @@
     .SearchBar input:focus {
         width: 180px;
     }
+
+    .SearchWrap {
+        width: min(260px, 100%);
+    }
 }
 
 @media (max-width: 768px) {
     .Header > div {
-        padding: 0 1rem;
+        height: auto;
+        min-height: 70px;
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        row-gap: 0.75rem;
     }
 
     /* Показываем кнопку гамбургера */
     .MenuToggle {
         display: flex;
+        margin-left: auto;
     }
 
     /* Выпадающее мобильное меню */
@@ -192,6 +218,11 @@
         z-index: 99;
     }
 
+    .SearchWrap {
+        order: 3;
+        width: 100%;
+    }
+
     .NavBarOpen {
         transform: translateY(0);
         opacity: 1;
@@ -206,11 +237,14 @@
     }
 
     .NavSection a {
-        display: block;
+        display: flex;
+        justify-content: flex-start;
         padding: 0.85rem 1.5rem;
+        min-height: auto;
         border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         font-size: var(--font-size-standart);
         overflow: visible;
+        text-align: left;
     }
 
     .NavSection a:last-child {

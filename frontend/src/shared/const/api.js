@@ -3,6 +3,7 @@ import axios from "axios";
 // Базовый URL API (по умолчанию localhost, можно переопределить через .env)
 const DEFAULT_API_BASE = "http://localhost:8000/api";
 const API_BASE_URL = (process.env.REACT_APP_API_URL || DEFAULT_API_BASE).replace(/\/$/, "");
+const MEDIA_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
 
 // Создание экземпляра axios с предустановленным baseURL и заголовками
 export const apiClient = axios.create({
@@ -61,6 +62,14 @@ const buildQuery = (params) => {
 // Возвращает строку полного URL без лишних слешей
 const endpoint = (path) =>
   `${API_BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`.replace(/\/$/, "");
+
+export const resolveMediaUrl = (path) => {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path.startsWith("//")) return `http:${path}`;
+  if (path.startsWith("/")) return `${MEDIA_BASE_URL}${path}`;
+  return `${MEDIA_BASE_URL}/${path}`;
+};
 
 // ======================
 // ОБЩИЕ REST МЕТОДЫ

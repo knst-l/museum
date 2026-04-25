@@ -8,3 +8,5 @@ export {FeedbackPage} from './FeedbackPage/FeedbackPage';
 export {Excursions} from './Excursions/Excursions';
 export {HistoricalFiguresPage} from './HistoricalFiguresPage/HistoricalFiguresPage';
 export {HistoricalFigureDetailPage} from './HistoricalFigureDetailPage/HistoricalFigureDetailPage';
+export {SearchPage} from './SearchPage/SearchPage';
+export {VirtualTourPage} from './VirtualTourPage/VirtualTourPage';

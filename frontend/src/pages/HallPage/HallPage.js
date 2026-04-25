@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import Styles from "./HallPage.module.css"
 import {MuseumWidgetList} from "../../shared/ui";
 import Breadcrumbs from "../../shared/ui/Breadcrumbs/Breadcrumbs";
-import { HallsAPI } from "../../shared/const/api";
+import { HallsAPI, resolveMediaUrl } from "../../shared/const/api";
 
 export function HallPage() {
     const [halls, setHalls] = useState([])
@@ -48,7 +48,7 @@ export function HallPage() {
 
     const transformHallsToWidgets = (hallsList) => {
         return hallsList.map(hall => {
-            const imageUrl = hall.image?.image_url || "/logo192.png"
+            const imageUrl = resolveMediaUrl(hall.image?.image_url || hall.image?.image || "/logo192.png")
             return {
                 id: hall.id,
                 text: hall.name,

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Виртуальный музей вычислительной техники</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Подсказка управления -->
+  <div id="hud">
+    <div class="title">Виртуальный музей</div>
+    <div class="hint">Кликни, чтобы начать. WASD — ходьба, мышь — обзор, Shift — быстрее, Esc — выйти.</div>
+  </div>
+
+  <!-- Подпись экспоната -->
+  <div id="label" class="label" style="display:none;">
+    <div class="label-title" id="labelTitle"></div>
+    <div class="label-text" id="labelText"></div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+  <div id="crosshair">+</div>
+
+  <!-- Подсказка "нажми E" -->
+  <div id="actionHint" style="display:none;">Нажми <b>E</b> чтобы открыть</div>
+
+  <!-- Модальное окно просмотра модели -->
+  <div id="viewer" class="viewer" style="display:none;">
+    <div class="viewer-bar">
+      <div id="viewerTitle" class="viewer-title"></div>
+      <button id="viewerClose" class="viewer-close">Закрыть ✕</button>
+    </div>
+    <canvas id="viewerCanvas"></canvas>
+    <div class="viewer-help">Мышь: вращать • Колесо: зум • ПКМ: панорама</div>
+  </div>
+</body>
+</html>

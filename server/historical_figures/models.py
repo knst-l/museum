@@ -5,7 +5,7 @@ from shared.models import TimeStampedModel, Image
 class ScienceField(TimeStampedModel):
     """Модель области науки."""
     name = models.CharField(
-        max_length=255, 
+        max_length=255,
         unique=True,
         verbose_name="Название области науки"
     )
@@ -13,7 +13,7 @@ class ScienceField(TimeStampedModel):
     class Meta:
         verbose_name = "Область науки"
         verbose_name_plural = "Области науки"
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -37,7 +37,7 @@ class HistoricalFigure(TimeStampedModel):
         verbose_name="Дата рождения"
     )
     death_date = models.DateField(
-        blank=True, 
+        blank=True,
         null=True,
         verbose_name="Дата смерти"
     )
@@ -48,19 +48,27 @@ class HistoricalFigure(TimeStampedModel):
         verbose_name="Биография"
     )
     science_fields = models.ManyToManyField(
-        ScienceField, 
-        related_name='historical_figures',
+        ScienceField,
+        related_name="historical_figures",
         verbose_name="Области науки"
     )
     images = models.ManyToManyField(
-        Image, 
-        related_name='historical_figures', 
+        Image,
+        related_name="historical_figures",
         blank=True,
         verbose_name="Изображения"
     )
+    primary_image = models.ForeignKey(
+        Image,
+        related_name="historical_figures_primary",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Главное изображение"
+    )
     artifacts = models.ManyToManyField(
-        'artifacts.Artifact', 
-        related_name='historical_figures', 
+        "artifacts.Artifact",
+        related_name="historical_figures",
         blank=True,
         verbose_name="Артефакты"
     )
@@ -68,12 +76,11 @@ class HistoricalFigure(TimeStampedModel):
     class Meta:
         verbose_name = "Историческая личность"
         verbose_name_plural = "Исторические личности"
-        ordering = ['last_name', 'first_name']
+        ordering = ["last_name", "first_name"]
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
 
     @property
     def full_name(self):
-        """Возвращает полное имя исторической личности."""
         return f"{self.last_name} {self.first_name} {self.middle_name}".strip()

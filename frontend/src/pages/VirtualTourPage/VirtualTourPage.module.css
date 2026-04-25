@@ -1,0 +1,96 @@
+.VirtualTourPage {
+    width: 100%;
+    max-width: var(--width-main-content);
+    margin: 0 auto;
+    padding: 0 1.5rem 2rem;
+}
+
+.Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.75rem 0 1rem;
+}
+
+.Title {
+    margin: 0 0 0.75rem;
+    color: var(--color-secondary);
+    font-size: 32px;
+    line-height: 1.15;
+}
+
+.Description {
+    margin: 0;
+    max-width: 760px;
+    color: var(--c-dark-gray);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.OpenButton {
+    flex-shrink: 0;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    background: var(--color-accent);
+    color: var(--c-white);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.OpenButton:hover {
+    background: var(--color-accent-hover);
+    color: var(--c-white);
+}
+
+.Hints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.Hints span {
+    padding: 0.45rem 0.7rem;
+    border: 1px solid rgba(52, 114, 192, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-secondary);
+    font-size: 14px;
+    line-height: 1.25;
+}
+
+.FrameWrap {
+    width: 100%;
+    border: 1px solid rgba(52, 114, 192, 0.18);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #e7eef7;
+}
+
+.Frame {
+    display: block;
+    width: 100%;
+    min-height: 78vh;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .VirtualTourPage {
+        padding: 0 1rem 1.5rem;
+    }
+
+    .Header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .Title {
+        font-size: 28px;
+    }
+
+    .Frame {
+        min-height: 68vh;
+    }
+}

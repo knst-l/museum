@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { HistoricalFiguresAPI } from '../../shared/const/api';
+import { HistoricalFiguresAPI, resolveMediaUrl } from '../../shared/const/api';
 import Breadcrumbs from '../../shared/ui/Breadcrumbs/Breadcrumbs';
 import Styles from './HistoricalFigureDetailPage.module.css';
 
@@ -78,7 +78,7 @@ export function HistoricalFigureDetailPage() {
 
     const images = figure.images && figure.images.length > 0
         ? figure.images.map(img => ({
-            url: img.image_url || img.image || '',
+            url: resolveMediaUrl(img.image_url || img.image || ''),
             objectPosition: img.object_position || '50% 50%',
         }))
         : [];

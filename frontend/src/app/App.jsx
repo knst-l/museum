@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import BaseLayout from '../shared/ui/BaseLayout/BaseLayout';
-import { ChatBotButton, ChatWindow } from '../widgets/ChatBot';
 import { 
   HomePage, 
   ContactsPage, 
@@ -12,15 +11,13 @@ import {
   ArtifactDetailPage,
   FeedbackPage,
   HistoricalFiguresPage,
-  HistoricalFigureDetailPage
+  HistoricalFigureDetailPage,
+  SearchPage,
+  VirtualTourPage
 } from '../pages';
 
 function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-
-  const toggleChat = () => {
-    setIsChatOpen((prev) => !prev);
-  };
+  const [isChatOpen] = useState(false);
 
   return (
     <>
@@ -34,13 +31,13 @@ function App() {
           <Route path="/halls" element={<HallPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/survey" element={<FeedbackPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/virtual-tour" element={<VirtualTourPage />} />
           <Route path="/artifacts" element={<ArtifactPage />} />
           <Route path="/artifact/:id" element={<ArtifactDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BaseLayout>
-      <ChatBotButton onClick={toggleChat} isOpen={isChatOpen} />
-      <ChatWindow isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );
 }

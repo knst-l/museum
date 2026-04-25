@@ -1,6 +1,7 @@
 import Styles from './Header.module.css';
 import {NavBar} from "./NavBar";
 import {Logo} from "../../shared/ui";
+import { SearchForm } from '../../shared/ui/SearchForm';
 
 const navigationButtons = [
     ["Главная", "/home"],
@@ -17,6 +18,9 @@ export function Header() {
             <div className="HeaderContent">
                 <Logo/>
                 <NavBar navigationButtons={navigationButtons}/>
+                <div className={Styles.SearchWrap}>
+                    <SearchForm compact placeholder="Поиск по сайту" />
+                </div>
             </div>
         </header>
     )

@@ -10,12 +10,11 @@
 
 {% block branding %}
 <div id="site-name">
-    <a href="{% url 'admin:index' %}">
-        <img src="{% static 'admin/img/logo.png' %}" alt="Логотип ИрНИТУ" style="height: 40px; margin-right: 10px; vertical-align: middle;">
-        <span style="vertical-align: middle;">Музей вычислительной техники ИрНИТУ</span>
+    <a href="{% url 'admin:index' %}" class="admin-branding">
+        <img src="{% static 'admin/img/logo512.png' %}" alt="Логотип ИрНИТУ" class="admin-branding__logo">
+        <span class="admin-branding__title">Музей вычислительной техники ИрНИТУ</span>
     </a>
 </div>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
-

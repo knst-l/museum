@@ -1,0 +1,120 @@
+:root {
+    --museum-blue: #3472C0;
+    --museum-blue-dark: #2A5DA5;
+    --museum-blue-soft: #EAF2FC;
+    --museum-text: #2A2F66;
+    --museum-border: #D9E3F1;
+}
+
+#header {
+    background: var(--museum-blue);
+    color: #ffffff;
+    padding: 8px 20px;
+}
+
+#header a:link,
+#header a:visited,
+#site-name a,
+#site-name a:link,
+#site-name a:visited {
+    color: #ffffff;
+}
+
+.admin-branding {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.admin-branding__logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.admin-branding__title {
+    display: inline-block;
+    max-width: none;
+    font-size: 15px;
+    line-height: 1.1;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+div.breadcrumbs {
+    background: var(--museum-blue-dark);
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: var(--museum-blue);
+}
+
+a:link,
+a:visited {
+    color: var(--museum-blue);
+}
+
+a:hover {
+    color: var(--museum-blue-dark);
+}
+
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+a.button {
+    background: var(--museum-blue);
+}
+
+.button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.submit-row input:hover,
+a.button:hover {
+    background: var(--museum-blue-dark);
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.vTextField:focus,
+.vLargeTextField:focus {
+    border-color: var(--museum-blue);
+    box-shadow: 0 0 0 1px var(--museum-blue);
+}
+
+.selector-chosen h2 {
+    background: var(--museum-blue-dark) !important;
+}
+
+#changelist-filter h2 {
+    background: var(--museum-blue-soft);
+    color: var(--museum-text);
+}
+
+.dashboard .module table td,
+.dashboard .module table th,
+.module,
+#changelist-filter {
+    border-color: var(--museum-border);
+}
+
+@media (max-width: 767px) {
+    #header {
+        padding: 8px 14px;
+    }
+
+    .admin-branding__title {
+        max-width: none;
+        font-size: 12px;
+    }
+
+    .admin-branding__logo {
+        width: 30px;
+        height: 30px;
+    }
+}

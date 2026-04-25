@@ -4,7 +4,7 @@ import {ArtifactTimeline} from "./ArtifactTimeline"
 import {ArtifactCard} from "../../shared/ui/ArtifactCard/ArtifactCard"
 import {useSearchParams} from "react-router-dom"
 import Breadcrumbs from "../../shared/ui/Breadcrumbs/Breadcrumbs"
-import { ArtifactsAPI, HallsAPI, ArtifactCategoriesAPI } from "../../shared/const/api"
+import { ArtifactsAPI, HallsAPI, ArtifactCategoriesAPI, resolveMediaUrl } from "../../shared/const/api"
 
 export function ArtifactPage() {
     const [params] = useSearchParams()
@@ -83,7 +83,7 @@ export function ArtifactPage() {
         const firstImage = artifact.images && artifact.images.length > 0 
             ? artifact.images[0] 
             : null
-        const imageUrl = firstImage?.image_url || "/logo192.png"
+        const imageUrl = resolveMediaUrl(firstImage?.image_url || firstImage?.image || "/logo192.png")
 
         return {
             id: artifact.id,
