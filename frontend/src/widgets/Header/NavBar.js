@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import Styles from "./Header.module.css";
 
 export function NavBar({navigationButtons}) {
@@ -19,9 +20,14 @@ export function NavBar({navigationButtons}) {
             <div className={`${Styles.NavBar} ${isOpen ? Styles.NavBarOpen : ''}`}>
                 <div className={Styles.NavSection}>
                     {navigationButtons.map((element, index) =>
-                        <a href={element[1]} key={index} onClick={() => setIsOpen(false)}>
+                        <NavLink
+                            to={element[1]}
+                            key={index}
+                            onClick={() => setIsOpen(false)}
+                            className={({ isActive }) => (isActive ? Styles.ActiveLink : "")}
+                        >
                             <p>{element[0]}</p>
-                        </a>
+                        </NavLink>
                     )}
                 </div>
             </div>

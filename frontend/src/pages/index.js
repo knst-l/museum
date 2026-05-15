@@ -10,3 +10,4 @@ export {HistoricalFiguresPage} from './HistoricalFiguresPage/HistoricalFiguresPa
 export {HistoricalFigureDetailPage} from './HistoricalFigureDetailPage/HistoricalFigureDetailPage';
 export {SearchPage} from './SearchPage/SearchPage';
 export {VirtualTourPage} from './VirtualTourPage/VirtualTourPage';
+export {GraduatesArchivePage} from './GraduatesArchivePage/GraduatesArchivePage';

@@ -5,10 +5,10 @@
 }
 
 .Excursions h1 {
-    color: var(--c-dark-blue);
-    margin-bottom: 1.5rem;
-    font-size: var(--font-size-big);
-    font-weight: var(--font-weight-semibold);
+    color: var(--c-blue);
+    margin: 0 0 1.5rem;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .description {

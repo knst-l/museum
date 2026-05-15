@@ -46,6 +46,11 @@ export function HallPage() {
         }
     }, [])
 
+    const visibleHalls = halls.filter((hall) => {
+        const normalizedName = String(hall?.name || "").trim().toLowerCase()
+        return normalizedName !== "главный зал"
+    })
+
     const transformHallsToWidgets = (hallsList) => {
         return hallsList.map(hall => {
             const imageUrl = resolveMediaUrl(hall.image?.image_url || hall.image?.image || "/logo192.png")
@@ -83,7 +88,7 @@ export function HallPage() {
         )
     }
 
-    if (halls.length === 0) {
+    if (visibleHalls.length === 0) {
         return (
             <>
                 <Breadcrumbs links={breadcrumbsLinks} />
@@ -97,7 +102,7 @@ export function HallPage() {
         )
     }
 
-    const widgets = transformHallsToWidgets(halls)
+    const widgets = transformHallsToWidgets(visibleHalls)
 
     return (
         <>

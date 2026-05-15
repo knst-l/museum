@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import BaseLayout from '../shared/ui/BaseLayout/BaseLayout';
+import { ChatBotButton, ChatWindow } from '../widgets/ChatBot';
 import { 
   HomePage, 
   ContactsPage, 
@@ -13,11 +14,12 @@ import {
   HistoricalFiguresPage,
   HistoricalFigureDetailPage,
   SearchPage,
-  VirtualTourPage
+  VirtualTourPage,
+  GraduatesArchivePage
 } from '../pages';
 
 function App() {
-  const [isChatOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <>
@@ -33,11 +35,14 @@ function App() {
           <Route path="/survey" element={<FeedbackPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/virtual-tour" element={<VirtualTourPage />} />
+          <Route path="/graduates-archive" element={<GraduatesArchivePage />} />
           <Route path="/artifacts" element={<ArtifactPage />} />
           <Route path="/artifact/:id" element={<ArtifactDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BaseLayout>
+      <ChatBotButton onClick={() => setIsChatOpen((prev) => !prev)} isOpen={isChatOpen} />
+      <ChatWindow isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );
 }

@@ -1,27 +1,26 @@
 import Styles from './Header.module.css';
-import {NavBar} from "./NavBar";
-import {Logo} from "../../shared/ui";
+import { NavBar } from "./NavBar";
+import { Logo } from "../../shared/ui";
 import { SearchForm } from '../../shared/ui/SearchForm';
 
 const navigationButtons = [
-    ["Главная", "/home"],
-    ["Экскурсии", "/excursions"],
-    ["Исторические личности", "/historical_figures"],
-    ["Залы с экспонатами", "/halls"]
-]
-
+  ["Главная", "/home"],
+  ["Экскурсии", "/excursions"],
+  ["Исторические личности", "/historical_figures"],
+  ["Залы с экспонатами", "/halls"],
+  ["Фотоархив", "/graduates-archive"],
+];
 
 export function Header() {
-
-    return (
-        <header className={Styles.Header}>
-            <div className="HeaderContent">
-                <Logo/>
-                <NavBar navigationButtons={navigationButtons}/>
-                <div className={Styles.SearchWrap}>
-                    <SearchForm compact placeholder="Поиск по сайту" />
-                </div>
-            </div>
-        </header>
-    )
+  return (
+    <header className={Styles.Header}>
+      <div className="HeaderContent">
+        <Logo />
+        <NavBar navigationButtons={navigationButtons} />
+        <div className={Styles.SearchWrap}>
+          <SearchForm compact placeholder="Поиск по сайту" />
+        </div>
+      </div>
+    </header>
+  );
 }
