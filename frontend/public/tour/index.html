@@ -33,6 +33,18 @@
   <!-- Подсказка "нажми E" -->
   <div id="actionHint" style="display:none;">Нажми <b>E</b> чтобы открыть</div>
 
+  <div id="mobileControls" class="mobile-controls" aria-hidden="true">
+    <div class="move-pad">
+      <button type="button" class="move-btn up" data-move="forward" aria-label="Вперед">▲</button>
+      <div class="move-row">
+        <button type="button" class="move-btn left" data-move="left" aria-label="Влево">◀</button>
+        <button type="button" class="move-btn right" data-move="right" aria-label="Вправо">▶</button>
+      </div>
+      <button type="button" class="move-btn down" data-move="backward" aria-label="Назад">▼</button>
+    </div>
+    <button type="button" id="mobileActionButton" class="action-btn" style="display:none;">Открыть экспонат</button>
+  </div>
+
   <!-- Модальное окно просмотра модели -->
   <div id="viewer" class="viewer" style="display:none;">
     <div class="viewer-bar">

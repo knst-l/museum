@@ -31,11 +31,11 @@ export function VirtualTourPage() {
         </div>
 
         <div className={Styles.Hints}>
-          <span>Клик по туру — начать</span>
+          <span>Компьютер: клик по туру — начать</span>
           <span>WASD — перемещение</span>
           <span>Мышь — обзор</span>
-          <span>E — открыть экспонат</span>
-          <span>Esc — выйти</span>
+          <span>Телефон: свайп — обзор</span>
+          <span>Кнопки снизу — движение и открытие экспоната</span>
         </div>
 
         <div className={Styles.FrameWrap}>

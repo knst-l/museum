@@ -90,7 +90,16 @@
         font-size: 28px;
     }
 
+    .Hints {
+        gap: 0.45rem;
+    }
+
+    .Hints span {
+        font-size: 13px;
+        padding: 0.4rem 0.55rem;
+    }
+
     .Frame {
-        min-height: 68vh;
+        min-height: 72vh;
     }
 }

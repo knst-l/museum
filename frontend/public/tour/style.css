@@ -130,3 +130,114 @@ html, body {
   padding: 10px 14px;
   border-top: 1px solid rgba(255,255,255,0.12);
 }
+
+.mobile-controls {
+  display: none;
+  position: absolute;
+  inset: auto 0 14px 0;
+  z-index: 18;
+  padding: 0 14px;
+  pointer-events: none;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.move-pad {
+  display: grid;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.move-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.move-btn,
+.action-btn {
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.52);
+  color: #fff;
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+}
+
+.move-btn {
+  width: 54px;
+  height: 54px;
+  font-size: 22px;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.move-pad .up,
+.move-pad .down {
+  justify-self: center;
+}
+
+.action-btn {
+  min-width: 156px;
+  min-height: 52px;
+  padding: 0.7rem 1rem;
+  font-size: 15px;
+  font-weight: 600;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+  #hud {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    max-width: none;
+    padding: 10px 12px;
+  }
+
+  #hud .hint {
+    font-size: 13px;
+  }
+
+  #crosshair {
+    display: none;
+  }
+
+  .label {
+    min-width: 0;
+    max-width: min(280px, calc(100vw - 28px));
+    font-size: 13px;
+  }
+
+  #actionHint {
+    top: auto;
+    bottom: 154px;
+    max-width: calc(100vw - 28px);
+    text-align: center;
+  }
+
+  .mobile-controls {
+    display: flex;
+  }
+
+  .viewer-bar {
+    gap: 10px;
+  }
+
+  .viewer-title {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  .viewer-close {
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .viewer-help {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+}

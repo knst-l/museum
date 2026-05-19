@@ -62,6 +62,8 @@ const label = document.getElementById("label");
 const labelTitle = document.getElementById("labelTitle");
 const labelText = document.getElementById("labelText");
 const actionHint = document.getElementById("actionHint");
+const mobileControls = document.getElementById("mobileControls");
+const mobileActionButton = document.getElementById("mobileActionButton");
 
 const viewer = document.getElementById("viewer");
 const viewerCanvas = document.getElementById("viewerCanvas");
@@ -69,6 +71,7 @@ const viewerClose = document.getElementById("viewerClose");
 const viewerTitle = document.getElementById("viewerTitle");
 
 let viewerOpen = false;
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window;
 
 /** =======================
  *  4) СЦЕНА (СВЕТЛЫЙ МУЗЕЙ)
@@ -146,12 +149,25 @@ addCeilingLight(6, 6);
 const controls = new PointerLockControls(camera, renderer.domElement);
 scene.add(controls.getObject());
 
-renderer.domElement.addEventListener("click", () => {
-  if (viewerOpen) return;
-  controls.lock();
-});
-controls.addEventListener("lock", () => { if (hud) hud.style.display = "none"; });
-controls.addEventListener("unlock", () => { if (hud) hud.style.display = "block"; });
+if (hud) {
+  const hint = hud.querySelector(".hint");
+  if (hint && isTouchDevice) {
+    hint.textContent = "Проведите пальцем по экрану для обзора. Кнопки снизу отвечают за перемещение, кнопка «Открыть экспонат» — за просмотр модели.";
+  }
+}
+
+if (!isTouchDevice) {
+  renderer.domElement.addEventListener("click", () => {
+    if (viewerOpen) return;
+    controls.lock();
+  });
+  controls.addEventListener("lock", () => { if (hud) hud.style.display = "none"; });
+  controls.addEventListener("unlock", () => { if (hud) hud.style.display = "block"; });
+} else {
+  if (mobileControls) {
+    mobileControls.setAttribute("aria-hidden", "false");
+  }
+}
 
 const keys = { w: false, a: false, s: false, d: false, shift: false };
 document.addEventListener("keydown", (e) => {
@@ -171,6 +187,97 @@ document.addEventListener("keyup", (e) => {
   if (e.code === "KeyD") keys.d = false;
   if (e.code === "ShiftLeft" || e.code === "ShiftRight") keys.shift = false;
 });
+
+if (isTouchDevice) {
+  camera.rotation.order = "YXZ";
+
+  let touchLookId = null;
+  let lastTouchX = 0;
+  let lastTouchY = 0;
+  const touchSensitivity = 0.005;
+  const maxPitch = Math.PI / 2 - 0.2;
+
+  const setMoveState = (direction, pressed) => {
+    if (direction === "forward") keys.w = pressed;
+    if (direction === "backward") keys.s = pressed;
+    if (direction === "left") keys.a = pressed;
+    if (direction === "right") keys.d = pressed;
+  };
+
+  const clearMoveStates = () => {
+    keys.w = false;
+    keys.a = false;
+    keys.s = false;
+    keys.d = false;
+  };
+
+  mobileControls?.querySelectorAll("[data-move]").forEach((button) => {
+    const direction = button.dataset.move;
+    const press = (event) => {
+      event.preventDefault();
+      setMoveState(direction, true);
+    };
+    const release = (event) => {
+      event.preventDefault();
+      setMoveState(direction, false);
+    };
+
+    button.addEventListener("touchstart", press, { passive: false });
+    button.addEventListener("touchend", release, { passive: false });
+    button.addEventListener("touchcancel", release, { passive: false });
+    button.addEventListener("mousedown", press);
+    button.addEventListener("mouseup", release);
+    button.addEventListener("mouseleave", release);
+  });
+
+  mobileActionButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+    tryOpenFocused();
+  });
+
+  renderer.domElement.addEventListener("touchstart", (event) => {
+    if (viewerOpen) return;
+    const target = event.target;
+    if (target instanceof HTMLElement && target.closest("#mobileControls")) return;
+
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+
+    touchLookId = touch.identifier;
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+  }, { passive: true });
+
+  renderer.domElement.addEventListener("touchmove", (event) => {
+    if (viewerOpen || touchLookId === null) return;
+    const touch = Array.from(event.changedTouches).find((item) => item.identifier === touchLookId);
+    if (!touch) return;
+
+    const deltaX = touch.clientX - lastTouchX;
+    const deltaY = touch.clientY - lastTouchY;
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+
+    camera.rotation.y -= deltaX * touchSensitivity;
+    camera.rotation.x = THREE.MathUtils.clamp(
+      camera.rotation.x - deltaY * touchSensitivity,
+      -maxPitch,
+      maxPitch
+    );
+  }, { passive: true });
+
+  renderer.domElement.addEventListener("touchend", (event) => {
+    if (touchLookId === null) return;
+    const touch = Array.from(event.changedTouches).find((item) => item.identifier === touchLookId);
+    if (!touch) return;
+    touchLookId = null;
+  }, { passive: true });
+
+  renderer.domElement.addEventListener("touchcancel", () => {
+    touchLookId = null;
+    clearMoveStates();
+  }, { passive: true });
+}
 
 /** =======================
  *  6) ЗАГРУЗКА / ПИВОТЫ (КЛЮЧЕВАЯ ПОЧИНКА)
@@ -371,10 +478,30 @@ function worldToScreen(v3) {
   return { x: (v.x * 0.5 + 0.5) * innerWidth, y: (-v.y * 0.5 + 0.5) * innerHeight, z: v.z };
 }
 
+function getPlayerObject() {
+  return controls.getObject();
+}
+
+function canControlScene() {
+  return !viewerOpen && (isTouchDevice || controls.isLocked);
+}
+
+function getForwardDirection() {
+  if (isTouchDevice) {
+    const dir = new THREE.Vector3(0, 0, -1);
+    dir.applyQuaternion(camera.quaternion);
+    return dir;
+  }
+
+  const dir = new THREE.Vector3();
+  controls.getDirection(dir);
+  return dir;
+}
+
 function updateLabelNearest() {
   if (!label || !labelTitle || !labelText) return;
 
-  const camPos = controls.getObject().position;
+  const camPos = getPlayerObject().position;
   let nearest = null;
   let nearestDist = Infinity;
 
@@ -405,9 +532,8 @@ const centerNDC = new THREE.Vector2(0, 0);
 let focused = null;
 
 function fallbackFocus() {
-  const camPos = controls.getObject().position;
-  const dirv = new THREE.Vector3();
-  controls.getDirection(dirv);
+  const camPos = getPlayerObject().position;
+  const dirv = getForwardDirection();
   dirv.y = 0; dirv.normalize();
 
   let best = null;
@@ -429,9 +555,10 @@ function fallbackFocus() {
 function updateFocus() {
   if (!actionHint) return;
 
-  if (!controls.isLocked || viewerOpen) {
+  if (!canControlScene()) {
     focused = null;
     actionHint.style.display = "none";
+    if (mobileActionButton) mobileActionButton.style.display = "none";
     return;
   }
 
@@ -445,18 +572,22 @@ function updateFocus() {
   if (!ex) {
     focused = null;
     actionHint.style.display = "none";
+    if (mobileActionButton) mobileActionButton.style.display = "none";
     return;
   }
 
-  const d = controls.getObject().position.distanceTo(ex.pivot.position);
+  const d = getPlayerObject().position.distanceTo(ex.pivot.position);
   if (d > FOCUS_DISTANCE) {
     focused = null;
     actionHint.style.display = "none";
+    if (mobileActionButton) mobileActionButton.style.display = "none";
     return;
   }
 
   focused = ex;
   actionHint.style.display = "block";
+  actionHint.innerHTML = isTouchDevice ? "Нажмите кнопку ниже, чтобы открыть экспонат" : "Нажми <b>E</b> чтобы открыть";
+  if (mobileActionButton) mobileActionButton.style.display = "inline-flex";
 }
 
 function tryOpenFocused() {
@@ -525,6 +656,7 @@ function openViewer(exhibit) {
   if (!viewer || !viewerTitle || !viewerCanvas) return;
 
   viewerOpen = true;
+  if (mobileActionButton) mobileActionButton.style.display = "none";
   try { controls.unlock(); } catch {}
 
   viewer.style.display = "grid";
@@ -551,6 +683,7 @@ function openViewer(exhibit) {
 function closeViewer() {
   viewerOpen = false;
   if (viewer) viewer.style.display = "none";
+  if (mobileActionButton && focused) mobileActionButton.style.display = "inline-flex";
 }
 if (viewerClose) viewerClose.addEventListener("click", closeViewer);
 
@@ -572,13 +705,12 @@ function animate() {
   const dt = Math.min(clock.getDelta(), 0.05);
   const t = clock.elapsedTime;
 
-  if (controls.isLocked && !viewerOpen) {
+  if (canControlScene()) {
     const speed = keys.shift ? 5.2 : 2.9;
     const vx = (keys.d ? 1 : 0) - (keys.a ? 1 : 0);
     const vz = (keys.w ? 1 : 0) - (keys.s ? 1 : 0);
 
-    const dirv = new THREE.Vector3();
-    controls.getDirection(dirv);
+    const dirv = getForwardDirection();
     dirv.y = 0;
     dirv.normalize();
 
@@ -589,12 +721,12 @@ function animate() {
     move.addScaledVector(right, vx);
     if (move.lengthSq() > 0) move.normalize();
 
-    controls.getObject().position.addScaledVector(move, speed * dt);
-    controls.getObject().position.y = PLAYER_HEIGHT;
+    getPlayerObject().position.addScaledVector(move, speed * dt);
+    getPlayerObject().position.y = PLAYER_HEIGHT;
 
     const half = ROOM_SIZE / 2 - 1.2;
-    controls.getObject().position.x = THREE.MathUtils.clamp(controls.getObject().position.x, -half, half);
-    controls.getObject().position.z = THREE.MathUtils.clamp(controls.getObject().position.z, -half, half);
+    getPlayerObject().position.x = THREE.MathUtils.clamp(getPlayerObject().position.x, -half, half);
+    getPlayerObject().position.z = THREE.MathUtils.clamp(getPlayerObject().position.z, -half, half);
   }
 
   if (FLOAT_AMPL > 0) {
